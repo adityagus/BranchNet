@@ -31,6 +31,14 @@ class AgentController extends Controller
         return response()->json(['accepted' => true], 202);
     }
 
+    public function devices(Request $request): JsonResponse
+    {
+        $data = $request->validate(['agent_id' => 'required|integer', 'branch_id' => 'required|integer']);
+        $agent = $this->agent($request, $data['branch_id'], $data['agent_id']);
+
+        return response()->json(['devices' => $agent->branch->devices()->get(['ip_address', 'hostname', 'vendor'])]);
+    }
+
     private function agent(Request $request, int $branchId, ?int $agentId = null): NetworkAgent
     {
         $token = $request->bearerToken();

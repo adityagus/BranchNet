@@ -53,6 +53,11 @@ do {
             'timestamp' => date(DATE_ATOM),
         ]);
 
+        $deviceResponse = getJson($centralUrl . '/api/agent/devices?agent_id=' . (int) $config['agent_id'] . '&branch_id=' . (int) $config['branch_id'], $config);
+        if (isset($deviceResponse['devices']) && is_array($deviceResponse['devices'])) {
+            $devices = $deviceResponse['devices'];
+        }
+
         $reportDevices = [];
         foreach ($devices as $device) {
             $ip = trim((string) ($device['ip_address'] ?? ''));
@@ -107,6 +112,36 @@ function postJson(string $url, array $config, array $payload): array
                 'Content-Length: ' . strlen(json_encode($payload, JSON_THROW_ON_ERROR)),
             ]),
             'content' => json_encode($payload, JSON_THROW_ON_ERROR),
+            'timeout' => 15,
+            'ignore_errors' => true,
+        ],
+    ]);
+
+    $body = @file_get_contents($url, false, $context);
+    $status = 0;
+    foreach ($http_response_header ?? [] as $header) {
+        if (preg_match('/^HTTP\/\S+\s+(\d+)/', $header, $matches)) {
+            $status = (int) $matches[1];
+            break;
+        }
+    }
+
+    if ($body === false || $status < 200 || $status >= 300) {
+        throw new RuntimeException("API request failed ({$status}): {$url} {$body}");
+    }
+
+    return json_decode($body, true) ?: [];
+}
+
+function getJson(string $url, array $config): array
+{
+    $context = stream_context_create([
+        'http' => [
+            'method' => 'GET',
+            'header' => implode("\r\n", [
+                'Accept: application/json',
+                'Authorization: Bearer ' . $config['token'],
+            ]),
             'timeout' => 15,
             'ignore_errors' => true,
         ],

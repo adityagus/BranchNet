@@ -56,9 +56,11 @@ Artisan::command('sopiga:import-branches', function () {
     $this->info("Imported/updated {$imported} branches; skipped {$skipped} rows.");
 })->purpose('Import branch identity data from PostgreSQL Sopiga master.branch');
 
-function pgIdentifier(string $identifier): string
-{
-    $identifier = strtolower(trim($identifier));
-    abort_unless((bool) preg_match('/^[a-z0-9_$]+(?:\.[a-z0-9_$]+)?$/', $identifier), 422, "Invalid PostgreSQL identifier: {$identifier}");
-    return implode('.', array_map(fn ($part) => '"'.$part.'"', explode('.', $identifier)));
+if (! function_exists('pgIdentifier')) {
+    function pgIdentifier(string $identifier): string
+    {
+        $identifier = strtolower(trim($identifier));
+        abort_unless((bool) preg_match('/^[a-z0-9_$]+(?:\.[a-z0-9_$]+)?$/', $identifier), 422, "Invalid PostgreSQL identifier: {$identifier}");
+        return implode('.', array_map(fn ($part) => '"'.$part.'"', explode('.', $identifier)));
+    }
 }

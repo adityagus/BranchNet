@@ -47,3 +47,5 @@ php agent.php config.json
 ```
 
 Untuk production, jalankan agent sebagai service Supervisor/systemd. Agent harus dapat mengakses URL central dan perangkat di subnet branch.
+
+Contoh systemd tersedia di `branchnet-agent.service.example`. Agent ini bukan cron satu kali; prosesnya berjalan terus dan mengirim heartbeat serta report device setiap 60 detik.

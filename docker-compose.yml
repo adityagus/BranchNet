@@ -8,7 +8,7 @@ services:
     ports:
       - "${APP_PORT:-8001}:8000"
     networks:
-      - external-db
+      - staging_network
     environment:
       APP_NAME: BranchNet
       APP_ENV: production
@@ -57,7 +57,7 @@ services:
       app:
         condition: service_healthy
     networks:
-      - external-db
+      - staging_network
     command: php artisan queue:work database --queue=network-critical,network-monitoring,default --tries=3 --timeout=120
 
   scheduler:
@@ -78,10 +78,10 @@ services:
       app:
         condition: service_healthy
     networks:
-      - external-db
+      - staging_network
     command: php artisan schedule:work
 
 networks:
-  external-db:
+  staging_network:
     external: true
-    name: "${DOCKER_NETWORK:?Set DOCKER_NETWORK to the existing Docker network name}"
+    name: staging_shared_network

@@ -24,6 +24,7 @@ Route::get('/branches/{branch}/devices', [BranchDeviceController::class, 'index'
 Route::get('/branches/{branch}/devices/create', [DeviceController::class, 'create'])->name('branches.devices.create');
 Route::post('/branches/{branch}/devices', [DeviceController::class, 'store'])->name('branches.devices.store');
 Route::resource('agents', NetworkAgentController::class)->parameters(['agents' => 'agent'])->except(['show']);
+Route::get('/agents/{agent}/config', [NetworkAgentController::class, 'config'])->name('agents.config');
 Route::resource('alerts', AlertController::class)->except(['show']);
 Route::get('/devices', [DeviceController::class, 'index'])->name('devices.index');
 Route::get('/devices/{device}', [DeviceController::class, 'show'])->name('devices.show');

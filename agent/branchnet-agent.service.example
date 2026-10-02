@@ -1,0 +1,15 @@
+[Unit]
+Description=BranchNet local monitoring agent
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/docker/branchnet/agent
+ExecStart=/usr/bin/php /opt/docker/branchnet/agent/agent.php /opt/docker/branchnet/agent/config.json
+Restart=always
+RestartSec=10
+User=branchnet
+
+[Install]
+WantedBy=multi-user.target
