@@ -5,11 +5,26 @@
     <title>{{ $title ?? 'BranchNet NOC' }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>.flash{margin:18px 42px 0;padding:12px 16px;border-radius:8px}.flash.success{background:#183326;color:#5be49b}.flash.error{background:#3b2027;color:#ff6c78}.form-card{max-width:900px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:26px}.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:17px}.form-grid label{display:flex;flex-direction:column;gap:7px;color:var(--muted);font-size:12px}.form-grid input,.form-grid select,.form-grid textarea{width:100%;font-size:14px}.form-grid textarea{min-height:100px;resize:vertical}.form-grid .wide{grid-column:1/-1}.form-grid .check{flex-direction:row;align-items:center}.form-grid .check input{width:auto}.form-actions{display:flex;justify-content:flex-end;gap:12px;margin-top:25px;align-items:center}.actions{white-space:nowrap}.actions a,.actions button{background:none;border:0;color:var(--blue);cursor:pointer;text-decoration:none;font:12px 'DM Sans';margin-right:8px}.actions form{display:inline}.danger-button{background:#3b2027;color:var(--red);border:1px solid #67333b;border-radius:7px;padding:8px 12px;cursor:pointer;margin-left:8px}.inline{display:inline}.detail-actions,.toolbar-actions{display:flex;align-items:center;gap:10px}.detail-actions{justify-content:space-between}.detail-actions>span{display:flex;align-items:center;gap:8px}.settings-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.info-card{margin-top:14px}.info-card h3{margin-top:0}.info-card code{display:block;color:var(--green);background:var(--bg);padding:10px;margin-top:8px;border-radius:5px}@media(max-width:700px){.form-grid{grid-template-columns:1fr}.form-grid .wide{grid-column:auto}.toolbar,.toolbar-actions{align-items:flex-start;flex-direction:column}.detail-actions{align-items:flex-start;gap:14px;flex-direction:column}.settings-grid{grid-template-columns:1fr}}html[data-theme=light]{--bg:#f3f7fa;--panel:#fff;--panel2:#e7eef3;--line:#d2dee6;--text:#182733;--muted:#5d7180;--green:#168b58;--yellow:#a66b00;--red:#c33446;--blue:#1769aa}html[data-theme=light] body{background:var(--bg)}html[data-theme=light] .sidebar{background:#eaf1f5}html[data-theme=light] .topbar{background:#fff}html[data-theme=light] .topo-node{background:#e9f8ef}html[data-theme=light] .topo-node.warning{background:#fff7df}html[data-theme=light] .topo-node.offline{background:#ffebee}html[data-theme=light] .info-card code{background:#eef4f7}@media(max-width:700px){.form-grid{grid-template-columns:1fr}.form-grid .wide{grid-column:auto}.toolbar,.toolbar-actions{align-items:flex-start;flex-direction:column}.detail-actions{align-items:flex-start;gap:14px;flex-direction:column}}</style>
+    <style>
+        /* Gold theme overrides */
+        :root { --green:#f4c95d; --yellow:#e8b84a; --blue:#d9a83e; --line:#3d3524; --panel2:#211d16; }
+        .sidebar { background:#100f0c; }
+        .flash.success { background:#3a2f16; color:var(--green); }
+        .avatar { background:#3b2e15; color:var(--green); }
+        .status-pill { background:#3a2f16; color:var(--green); }
+        .topo-node { background:#2a2415; }
+        .device-icon { background:#3a2d15; }
+        .link, .back, .actions a, .actions button { color:var(--blue); }
+        html[data-theme=light] { --green:#b07a00; --yellow:#a66b00; --blue:#966500; --line:#dfc98e; --panel2:#fff8e6; --bg:#fffcf2; }
+        html[data-theme=light] .sidebar { background:#fff8e6; }
+        html[data-theme=light] .topbar { background:#fffdf7; }
+        html[data-theme=light] .topo-node { background:#fff8e6; }
+    </style>
 </head>
 <body>
 <div class="shell">
     <aside class="sidebar">
-        <div class="brand"><span class="brand-mark">⌁</span><span>BRANCH<span class="accent">NET</span></span></div>
+        <div class="brand"><span class="brand-mark"><img src="{{ asset('assets/logo-gadaimulia.png') }}" alt="" width="25px"></span><span>BRANCH<span class="accent">NET</span></span></div>
         <div class="eyebrow">NETWORK OPERATIONS</div>
         <nav>
             <a class="nav-item {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">▦ <span>Dashboard</span></a>

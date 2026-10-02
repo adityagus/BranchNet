@@ -12,8 +12,8 @@ use App\Http\Controllers\AuditLogController;
 use App\Http\Controllers\SettingsController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', fn () => view('welcome'));
-Route::get('/dashboard', DashboardController::class)->name('dashboard');
+// Route::get('/', fn () => view('welcome'));
+Route::get('/', DashboardController::class)->name('dashboard');
 Route::get('/network-map', NetworkMapController::class)->name('network-map');
 Route::get('/monitoring-history', [MonitoringHistoryController::class, 'index'])->name('monitoring-history');
 Route::get('/audit-logs', [AuditLogController::class, 'index'])->name('audit-logs');

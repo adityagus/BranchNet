@@ -1,0 +1,87 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: branchnet:latest
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-8001}:8000"
+    networks:
+      - external-db
+    environment:
+      APP_NAME: BranchNet
+      APP_ENV: production
+      APP_DEBUG: "${APP_DEBUG:-false}"
+      APP_KEY: "${APP_KEY:?Set APP_KEY in .env before starting}"
+      APP_URL: "${APP_URL:-http://localhost:8001}"
+      APP_TIMEZONE: "${APP_TIMEZONE:-Asia/Jakarta}"
+      LOG_CHANNEL: stderr
+      DB_CONNECTION: mysql
+      DB_HOST: "${DB_HOST:?Set DB_HOST in .env before starting}"
+      DB_PORT: "${DB_PORT:-3306}"
+      DB_DATABASE: "${DB_DATABASE:-branchnet}"
+      DB_USERNAME: "${DB_USERNAME:-branchnet}"
+      DB_PASSWORD: "${DB_PASSWORD:?Set DB_PASSWORD in .env before starting}"
+      SESSION_DRIVER: database
+      CACHE_STORE: database
+      QUEUE_CONNECTION: database
+    command: >-
+      sh -c "php artisan migrate --force
+      && php artisan config:cache
+      && php artisan route:cache
+      && php artisan view:cache
+      && php artisan serve --host=0.0.0.0 --port=8000"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8000 >/dev/null || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+
+  worker:
+    image: branchnet:latest
+    restart: unless-stopped
+    environment:
+      APP_ENV: production
+      APP_KEY: "${APP_KEY:?Set APP_KEY in .env before starting}"
+      DB_CONNECTION: mysql
+      DB_HOST: "${DB_HOST:?Set DB_HOST in .env before starting}"
+      DB_PORT: "${DB_PORT:-3306}"
+      DB_DATABASE: "${DB_DATABASE:-branchnet}"
+      DB_USERNAME: "${DB_USERNAME:-branchnet}"
+      DB_PASSWORD: "${DB_PASSWORD:?Set DB_PASSWORD in .env before starting}"
+      CACHE_STORE: database
+      QUEUE_CONNECTION: database
+    depends_on:
+      app:
+        condition: service_healthy
+    networks:
+      - external-db
+    command: php artisan queue:work database --queue=network-critical,network-monitoring,default --tries=3 --timeout=120
+
+  scheduler:
+    image: branchnet:latest
+    restart: unless-stopped
+    environment:
+      APP_ENV: production
+      APP_KEY: "${APP_KEY:?Set APP_KEY in .env before starting}"
+      DB_CONNECTION: mysql
+      DB_HOST: "${DB_HOST:?Set DB_HOST in .env before starting}"
+      DB_PORT: "${DB_PORT:-3306}"
+      DB_DATABASE: "${DB_DATABASE:-branchnet}"
+      DB_USERNAME: "${DB_USERNAME:-branchnet}"
+      DB_PASSWORD: "${DB_PASSWORD:?Set DB_PASSWORD in .env before starting}"
+      CACHE_STORE: database
+      QUEUE_CONNECTION: database
+    depends_on:
+      app:
+        condition: service_healthy
+    networks:
+      - external-db
+    command: php artisan schedule:work
+
+networks:
+  external-db:
+    external: true
+    name: "${DOCKER_NETWORK:?Set DOCKER_NETWORK to the existing Docker network name}"

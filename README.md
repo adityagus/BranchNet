@@ -2,6 +2,16 @@
 
 BranchNet adalah central Laravel 13 dashboard untuk memonitor subnet cabang tanpa membuka jaringan internal ke internet. Agent lokal mengirim heartbeat/report melalui HTTPS dengan bearer token ter-hash; pekerjaan scanning diproses queue.
 
+## Docker Compose
+
+Salin `.env.docker.example` menjadi `.env`, isi `APP_KEY`, `DOCKER_NETWORK`, `DB_HOST`, dan kredensial database sesuai database yang sudah berjalan di Docker network Anda, lalu jalankan:
+
+```bash
+docker compose up -d --build
+```
+
+Aplikasi tersedia di `http://localhost:8001`. Compose hanya menjalankan web app, queue worker, dan scheduler; database tidak dibuat oleh Compose ini. Untuk melihat log gunakan `docker compose logs -f app worker scheduler`.
+
 ## Stack
 
 - Laravel 13 / PHP 8.3+
