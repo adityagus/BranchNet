@@ -1,0 +1,8 @@
+# BranchNet scheduled monitoring
+# Replace /var/www/BranchNet with the real application directory.
+
+# Dispatch network scans, heartbeat checks, and log cleanup.
+* * * * * cd /var/www/BranchNet && /usr/bin/php artisan schedule:run >> storage/logs/scheduler.log 2>&1
+
+# Process queued device checks. flock prevents overlapping cron workers.
+* * * * * cd /var/www/BranchNet && /usr/bin/flock -n /tmp/branchnet-queue.lock /usr/bin/php artisan queue:work database --queue=network-critical,network-monitoring,default --stop-when-empty --tries=3 --timeout=120 >> storage/logs/queue-cron.log 2>&1

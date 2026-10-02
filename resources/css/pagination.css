@@ -1,0 +1,54 @@
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 18px;
+}
+
+.pagination nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.pagination nav > div {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.pagination a,
+.pagination span {
+    display: inline-flex;
+    min-width: 34px;
+    height: 34px;
+    align-items: center;
+    justify-content: center;
+    padding: 0 10px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    color: var(--muted);
+    background: var(--panel);
+    font: 12px 'DM Mono';
+    text-decoration: none;
+}
+
+.pagination a:hover {
+    color: var(--text);
+    border-color: var(--green);
+}
+
+.pagination span[aria-current='page'] {
+    color: var(--bg);
+    background: var(--green);
+    border-color: var(--green);
+}
+
+.pagination span[aria-disabled='true'] {
+    opacity: .45;
+}
+
+.pagination svg {
+    width: 16px;
+    height: 16px;
+}

@@ -1,0 +1,40 @@
+.sidebar {
+    flex: 0 0 240px;
+    min-height: 100vh;
+    max-height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.main {
+    width: 0;
+    min-width: 0;
+    overflow-x: hidden;
+}
+
+.topbar {
+    min-width: 0;
+}
+
+.top-actions {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+@media (max-width: 1000px) {
+    .sidebar {
+        flex-basis: 70px;
+    }
+}
+
+@media (max-width: 700px) {
+    .topbar {
+        height: auto;
+        min-height: 90px;
+        gap: 12px;
+    }
+
+    .top-actions {
+        gap: 6px;
+    }
+}
